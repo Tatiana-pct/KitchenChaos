@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]private float _moveSpeed =7f;
+    [SerializeField]private float _moveSpeed =10f;
+    [SerializeField]private float _rotateSpeed =20f;
 
     private void Update()
     {
@@ -20,12 +21,12 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.A))
         {
-            inputVector.x = +1f;
+            inputVector.x = -1f;
             Debug.Log("Presing A!");
         }
         if (Input.GetKey(KeyCode.D))
         {
-            inputVector.x = -1f;
+            inputVector.x = +1f;
             Debug.Log("Presing D!");
         }
 
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         transform.position += moveDir * _moveSpeed * Time.deltaTime;
 
-        Debug.Log(inputVector);
+        transform.forward =  Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * _rotateSpeed);
 
     }
 }
