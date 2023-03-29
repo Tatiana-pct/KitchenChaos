@@ -1,7 +1,26 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    //private static Player instance;
+   //public static Player Instance
+   //{
+   //    get { return instance; }
+   //    set { instance = value; }
+   //}
+
+    public  static Player Instance { get; private set ; }
+
+    
+
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter _selectedCounter;
+    }
+
+
     [SerializeField] private float _moveSpeed = 10f;
     [SerializeField] private float _rotateSpeed = 20f;
     [SerializeField] private float _playerRadius = 0.7f;
@@ -13,7 +32,16 @@ public class Player : MonoBehaviour
 
     private bool _isWalking;
     private Vector3 _lastInteractDir;
+    private ClearCounter _selectedCounter;
 
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Debug.LogError("There is more than one player instance");
+        }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -21,6 +49,32 @@ public class Player : MonoBehaviour
     }
 
     private void _gameInput_OnInteractAction(object sender, System.EventArgs e)
+    {
+        if (_selectedCounter != null)
+        {
+            _selectedCounter.Intreact();
+        }
+
+
+    }
+
+    private void Update()
+    {
+        HandleMouvement();
+        HandleInteractions();
+
+    }
+
+
+    #region IsWalking()
+    public bool IsWalking()
+    {
+        return _isWalking;
+    }
+    #endregion
+
+    #region HandleInteractions()
+    private void HandleInteractions()
     {
         Vector2 inputVector = _gameInput.GetMouvementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
@@ -37,55 +91,21 @@ public class Player : MonoBehaviour
             if (hit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
                 //Has ClearCounter
-                clearCounter.Intreact();
+                if (clearCounter != _selectedCounter)
+                {
+                    SetSelectedCounter(clearCounter);
+                }
             }
-
-        }
-    }
-
-    private void Update()
-    {
-        HandleMouvement();
-        HandleInteractions();
-
-    }
-    
-
-    #region IsWalking()
-    public bool IsWalking()
-    {
-        return _isWalking;
-    }
-    #endregion
-
-    #region HandleInteractions()
-    private void HandleInteractions()
-    {
-        Vector2 inputVector = _gameInput.GetMouvementVectorNormalized();
-        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-
-        if(moveDir != Vector3.zero)
-        {
-            _lastInteractDir = moveDir;
-        }
-
-        RaycastHit hit;
-
-        if(Physics.Raycast(transform.position, moveDir,out hit, _interactDistance, _CountersLayerMask))
-        {
-            if(hit.transform.TryGetComponent(out ClearCounter clearCounter))
+            else
             {
-                //Has ClearCounter
-                //clearCounter.Intreact();
+                SetSelectedCounter(null);
             }
 
-           //ClearCounter clearCounter = hit.transform.GetComponent<ClearCounter>();
-           //if(clearCounter != null)
-           //{
-           //    // Has ClearCounter
-           //}
         }
-       
+        else
+        {
+            SetSelectedCounter(null);
+        }
     }
 
     #endregion
@@ -144,6 +164,18 @@ public class Player : MonoBehaviour
         _isWalking = moveDir != Vector3.zero;
 
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * _rotateSpeed);
+    }
+    #endregion
+
+    #region SetSelectedCounter()
+    private void SetSelectedCounter(ClearCounter selectedCounter)
+    {
+        this._selectedCounter = selectedCounter;
+
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs
+        {
+            _selectedCounter = _selectedCounter,
+        });
     }
     #endregion
 }
