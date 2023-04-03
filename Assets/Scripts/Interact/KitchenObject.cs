@@ -15,7 +15,6 @@ public class KitchenObject : MonoBehaviour
     }
     #endregion
 
-
     #region SetKitchenObjectParent()
     public void SetKitchenObjectParent( IKitchenObjectParent kitchenObjectParent)
     {
