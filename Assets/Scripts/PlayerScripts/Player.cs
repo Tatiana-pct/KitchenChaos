@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IKitchenObjectParent
 {
     //private static Player instance;
    //public static Player Instance
@@ -28,11 +28,13 @@ public class Player : MonoBehaviour
     [SerializeField] private float _interactDistance = 2f;
     [SerializeField] private GameInput _gameInput;
     [SerializeField] private LayerMask _CountersLayerMask;
+    [SerializeField] private Transform _kitchenObjectHoldPoint;
 
 
     private bool _isWalking;
     private Vector3 _lastInteractDir;
     private ClearCounter _selectedCounter;
+    private KitchenObject _kitchenObject;
 
     private void Awake()
     {
@@ -52,7 +54,7 @@ public class Player : MonoBehaviour
     {
         if (_selectedCounter != null)
         {
-            _selectedCounter.Intreact();
+            _selectedCounter.Interact(this);
         }
 
 
@@ -178,4 +180,41 @@ public class Player : MonoBehaviour
         });
     }
     #endregion
+
+    #region GetKitchenObjectFollowTransform() Interface
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        return _kitchenObjectHoldPoint;
+    }
+    #endregion
+
+    #region SetKitchenObject() Interface
+    public void SetKitchenObject(KitchenObject kitchenObject)
+    {
+        this._kitchenObject = kitchenObject; 
+    }
+    #endregion
+
+    #region GetKitchenObject() Interface
+    public KitchenObject GetKitchenObject()
+    {
+        return _kitchenObject;
+    }
+    #endregion
+
+    #region ClearKitchenObject() Interface
+    public void ClearKitchenObject()
+    {
+        _kitchenObject = null;
+    }
+    #endregion
+
+    #region HasKitchenObject() Interface
+    public bool HasKitchenObject()
+    {
+        return _kitchenObject != null;
+    }
+    #endregion
+
+
 }

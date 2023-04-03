@@ -232,7 +232,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301428839}
-  m_LocalRotation: {x: 0.41501248, y: 0.000000022138998, z: -0.000000010098705, w: 0.9098157}
+  m_LocalRotation: {x: 0.41501248, y: -0.000000022138995, z: 0.000000010098703, w: 0.9098157}
   m_LocalPosition: {x: 0, y: 11.52, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -327,7 +327,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.41501248, y: 0.000000022138998, z: -0.000000010098705, w: 0.9098157}
+  m_LocalRotation: {x: 0.41501248, y: -0.000000022138995, z: 0.000000010098703, w: 0.9098157}
   m_LocalPosition: {x: 0, y: 11.52, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1157,6 +1157,11 @@ PrefabInstance:
     - target: {fileID: 8397771291426861213, guid: c871502674284194797fd5c5aa681e22,
         type: 3}
       propertyPath: _secondClerCounter
+      value: 
+      objectReference: {fileID: 506452791}
+    - target: {fileID: 8397771291426861213, guid: c871502674284194797fd5c5aa681e22,
+        type: 3}
+      propertyPath: _secondClearCounter
       value: 
       objectReference: {fileID: 506452791}
     m_RemovedComponents: []
